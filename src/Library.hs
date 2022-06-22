@@ -17,7 +17,15 @@ concentrado::String
 concentrado = "concentrado"
 
 bizcocho::Postre
-bizcocho = (Postre [chocolate] 100 25)
+bizcocho = Postre [chocolate] 100 25
+
+bizcochoCongelado::Postre
+bizcochoCongelado = Postre [chocolate] 120 0
+
+rosquilla::Postre
+rosquilla = Postre [frutilla] 50 15
+
+--------------------------------------------------------------------------------------------------------------
 
 type Hechizo = Postre -> Postre
 
@@ -38,3 +46,26 @@ riddikulus sabor postre = Postre ((sabores postre) ++ [reverse sabor]) (peso pos
 
 avadakedavra::Hechizo
 avadakedavra postre = immobulus (postre{sabores = []})
+
+--------------------------------------------------------------------------------------------------------------
+type Mesa = [Postre]
+mesaDulce::Mesa
+mesaDulce= [bizcocho, rosquilla]
+
+listo::Postre -> Bool
+listo postre = (peso postre > 0) &&  (temperatura postre > 0)
+
+loDejaListo::Mesa -> Hechizo -> Bool
+loDejaListo mesa hechizo = all listo (map hechizo mesa)
+
+--------------------------------------------------------------------------------------------------------------
+
+mesaFria::Mesa
+mesaFria= [bizcocho, bizcochoCongelado, rosquilla]
+
+cualesEstanListos::Mesa -> Mesa
+cualesEstanListos mesa = filter listo mesa
+
+pesoPromedioPostresListos::Mesa -> Number
+pesoPromedioPostresListos mesa = (sum (map peso (cualesEstanListos mesa))) / (length (cualesEstanListos mesa))
+
